@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FiCalendar, FiChevronLeft, FiChevronRight, FiPlay, FiStar } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -8,6 +8,7 @@ const HomeBanners = () => {
   const { data } = useSelector((state) => state.bannerapi)
   const dispatch = useDispatch()
   const [currentIndex, setCurrentIndex] = useState(0)
+  const touchStartX = useRef(0)
   const banners = (data || []).filter((item) => ['movie', 'tv'].includes(item.media_type || 'movie'))
   const activeIndex = banners.length ? currentIndex % banners.length : 0
 
@@ -33,10 +34,24 @@ const HomeBanners = () => {
     setCurrentIndex((previous) => (previous + direction + banners.length) % banners.length)
   }
 
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0].clientX
+  }
+
+  const handleTouchEnd = (event) => {
+    const swipeDistance = event.changedTouches[0].clientX - touchStartX.current
+
+    if (Math.abs(swipeDistance) < 50) return
+
+    changeSlide(swipeDistance > 0 ? -1 : 1)
+  }
+
   return (
     <section className='relative h-[78svh] min-h-135 overflow-hidden bg-neutral-950 pt-18 sm:min-h-155'>
       <div
-        className='flex h-full transition-transform duration-700 ease-out'
+        className='flex h-full touch-pan-y transition-transform duration-700 ease-out'
+        onTouchEnd={handleTouchEnd}
+        onTouchStart={handleTouchStart}
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
         {banners.map((title) => {
