@@ -47,7 +47,7 @@ const HomeBanners = () => {
   }
 
   return (
-    <section className='relative h-[calc(78svh+20px)] min-h-140 overflow-hidden bg-neutral-950 pt-18 sm:h-[calc(78svh+12px)] sm:min-h-[632px]'>
+    <section className='relative h-[calc(78svh+40px)] min-h-145 overflow-hidden bg-neutral-950 pt-18 sm:h-[calc(78svh+32px)] sm:min-h-[652px]'>
       <div
         className='flex h-full touch-pan-y transition-transform duration-700 ease-out'
         onTouchEnd={handleTouchEnd}
